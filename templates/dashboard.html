@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kirby Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="top-bar">
+        <h1>Kirby's Task and Notes Manager 🌸</h1>
+        <img src="/static/images/kirby.png" class="kirby">
+        <a href="/logout/" class="logout">Logout</a>
+    </div>
+
+    <!-- Tasks -->
+    <div class="section">
+        <h2>⭐ Tasks</h2>
+
+        <form method="post" action="/add-task/">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="What will Kirby do today?" required>
+            <button>Add</button>
+        </form>
+
+        <ul>
+            {% for task in tasks %}
+                <li class="{% if task.completed %}completed{% endif %}">
+                    {{ task.title }}
+                    <div class="actions">
+                        <a href="/toggle-task/{{ task.id }}/">💖</a>
+                        <a href="/delete-task/{{ task.id }}/">❌</a>
+                    </div>
+                </li>
+            {% empty %}
+                <li>No tasks yet! 🌱</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Notes -->
+    <div class="section">
+        <h2>📝 Notes</h2>
+
+        <form method="post" action="/add-note/">
+            {% csrf_token %}
+            <textarea name="content" placeholder="Kirby thoughts..." required></textarea>
+            <button>Add</button>
+        </form>
+
+        <ul>
+            {% for note in notes %}
+                <li>
+                    {{ note.content }}
+                    <div class="actions">
+                        <a href="/delete-note/{{ note.id }}/">❌</a>
+                    </div>
+                </li>
+            {% empty %}
+                <li>No notes yet! ✨</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</div>
+<audio id="bg-music" autoplay loop>
+    <source src="/static/audio/kirby.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    const music = document.getElementById("bg-music");
+    music.volume = 0.25; 
+
+    
+    document.addEventListener("click", () => {
+        if (music.paused) {
+            music.play();
+        }
+    }, { once: true });
+</script>
+</body>
+</html>
