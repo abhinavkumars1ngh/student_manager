@@ -1,10 +1,12 @@
+import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'dev-secret-key'
 
-DEBUG = True
+SECRET_KEY = os.environ.get("SECRET_KEY", "unsafe-secret-key")
+
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = ["*"]
 
@@ -65,7 +67,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 LOGIN_URL = 'login'
